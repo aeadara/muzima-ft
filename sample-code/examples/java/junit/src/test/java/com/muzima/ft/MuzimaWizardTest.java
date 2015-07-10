@@ -7,12 +7,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.net.URL;
+
+import static org.junit.Assert.assertEquals;
 
 public class MuzimaWizardTest {
   private AppiumDriver<AndroidElement> driver;
@@ -37,7 +40,7 @@ public class MuzimaWizardTest {
   }
 
   @Test
-  public void runThroughWizard() throws InterruptedException {
+  public void shouldAllowDataToBeDownloadedWhenRunningWizard() throws InterruptedException {
     //Scroll terms and condition text
     driver.scrollTo("Indiana University");
 
@@ -85,5 +88,65 @@ public class MuzimaWizardTest {
     driver
       .findElement(By.name("Next"))
       .click();
+
+    //Add Location
+    new WebDriverWait(driver, 30)
+      .until(ExpectedConditions
+        .elementToBeClickable(By.name("Step 3: Add Location(s)")));
+    AndroidElement locationAutocomplete = driver
+      .findElement(By.name("Enter location name ..."));
+    Point locationPoint = locationAutocomplete.getLocation();
+    locationAutocomplete.click();
+    locationAutocomplete.sendKeys("mos");
+    driver.tap(1, locationPoint.getX() + 50, locationPoint.getY() + 100, 10);
+    driver
+      .findElement(By.name("Next"))
+      .click();
+
+    //Add Location
+    new WebDriverWait(driver, 30)
+      .until(ExpectedConditions
+        .elementToBeClickable(By.name("Step 3: Add Provider(s)")));
+    AndroidElement providerAutocomplete = driver
+      .findElement(By.name("Enter provider name ..."));
+    Point providerAutocompleteLocation = providerAutocomplete.getLocation();
+    providerAutocomplete.click();
+    providerAutocomplete.sendKeys("vik");
+    driver.tap(1, providerAutocompleteLocation.getX() + 50, providerAutocompleteLocation.getY() + 50, 10);
+    driver
+      .findElement(By.name("Next"))
+      .click();
+
+
+    //Add Concept
+    new WebDriverWait(driver, 30)
+      .until(ExpectedConditions
+        .elementToBeClickable(By.name("Step 4: Add Concept(s)")));
+    AndroidElement conceptAutocomplete = driver
+      .findElement(By.name("Enter concept name ..."));
+    Point conceptAutocompleteLocation = conceptAutocomplete.getLocation();
+    conceptAutocomplete.click();
+    conceptAutocomplete.sendKeys("vik");
+    driver.tap(1, conceptAutocompleteLocation.getX() + 50, conceptAutocompleteLocation.getY() + 50, 10);
+    driver
+      .findElement(By.name("Next"))
+      .click();
+
+    //Skip barcode scanner
+    new WebDriverWait(driver, 30)
+      .until(ExpectedConditions
+        .elementToBeClickable(By.name("Step 5: Check for BarCode Scanner")));
+    driver
+      .findElement(By.name("Skip"))
+      .click();
+
+    //Run verifications on Dashboard
+    new WebDriverWait(driver, 30)
+      .until(ExpectedConditions
+        .elementToBeClickable(By.name("mUzima Clinic")));
+    AndroidElement cohortStatus = driver.findElements(By.className("android.widget.TextView")).get(3);
+    assertEquals("1 Synced, 8 Total", cohortStatus.getText());
+    AndroidElement formStatus = driver.findElements(By.className("android.widget.TextView")).get(5);
+    assertEquals("5 Synced", formStatus.getText());
   }
 }
