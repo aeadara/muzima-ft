@@ -15,4 +15,4 @@ To compile and run all tests, run:
 
 To run a single test, run:
 
-    mvn -Dtest=com.saucelabs.appium.SimpleTest test
+    mvn -Dtest=com.muzima.ft.MuzimaWizardTest test
