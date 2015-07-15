@@ -17,7 +17,7 @@ public class Muzima {
 
   public void install() throws MalformedURLException {
     File classpathRoot = new File(System.getProperty("user.dir"));
-    File appDir = new File(classpathRoot, "../../../../../muzima-android/target/");
+    File appDir = new File(classpathRoot, "../muzima-android/target/");
     File app = new File(appDir, "muzima-android.apk");
     capabilities = new DesiredCapabilities();
     capabilities.setCapability("deviceName", "Android Emulator");
